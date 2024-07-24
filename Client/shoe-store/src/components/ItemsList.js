@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import Item from './Item';
 
-const ItemsList = () => {
+const ItemsList = ({ addToCart }) => {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
@@ -16,12 +17,7 @@ const ItemsList = () => {
             <h1>Items Collection</h1>
             <div className="items-list">
                 {items.map(item => (
-                    <div key={item._id} className="item">
-                        <h2>{item.name}</h2>
-                        <p>{item.description}</p>
-                        <p>Price: ${item.price.toFixed(2)}</p>
-                        <p>Stock: {item.stock}</p>
-                    </div>
+                    <Item key={item._id} item={item} addToCart={addToCart} />
                 ))}
             </div>
         </div>

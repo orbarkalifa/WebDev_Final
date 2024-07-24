@@ -19,6 +19,9 @@ const dataSchema = new mongoose.Schema({
     stock: {
         type: Number
     },
+    imageUrl: { // Add imageUrl field
+        type: String
+    },
     orderDetails: {
         items: [{
             itemId: {
