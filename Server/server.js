@@ -1,12 +1,10 @@
-// index.js
 const express = require('express');
 const mongoose = require('mongoose');
-const Order = require('./models/Order'); // Assuming you have Order model
 
 const app = express();
 const port = 5000;
 
-mongoose.connect('mongodb://localhost:27017/mydatabase', {
+mongoose.connect('mongodb+srv://Student:webdev2024student@cluster0.uqyflra.mongodb.net/webdev2024', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
@@ -19,7 +17,7 @@ app.get('/', (req, res) => {
 });
 
 // Endpoint to create a new order
-app.post('/orders', async (req, res) => {
+app.post('/order', async (req, res) => {
     const order = new Order(req.body);
     try {
         const newOrder = await order.save();
