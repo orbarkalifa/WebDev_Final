@@ -1,8 +1,7 @@
-// src/components/Homepage.js
 import React, { useEffect, useState } from 'react';
-import Cart from './Cart.js';
-import ItemsList from './ItemsList.js';
-
+import { Container, Row, Col } from 'react-bootstrap';
+import Cart from './Cart';
+import ItemsList from './ItemsList';
 
 const saveCartToLocalStorage = (cart) => {
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -47,16 +46,22 @@ function Homepage() {
     const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
     return (
-        <div>
-            <h1>Welcome to the Homepage!</h1>
-            <ItemsList addToCart={addToCart} />
-            <Cart
-                cart={cart}
-                updateQuantity={updateQuantity}
-                deleteItem={deleteItem}
-                totalPrice={totalPrice}
-            />
-        </div>
+        <Container>
+            <h1 className="my-4">Welcome to the Homepage!</h1>
+            <Row>
+                <Col md={8}>
+                    <ItemsList addToCart={addToCart} />
+                </Col>
+                <Col md={4}>
+                    <Cart
+                        cart={cart}
+                        updateQuantity={updateQuantity}
+                        deleteItem={deleteItem}
+                        totalPrice={totalPrice}
+                    />
+                </Col>
+            </Row>
+        </Container>
     );
 }
 

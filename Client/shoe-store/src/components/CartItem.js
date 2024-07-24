@@ -1,4 +1,5 @@
 import React from 'react';
+import { Row, Col, Button, Form } from 'react-bootstrap';
 
 const CartItem = ({ item, onUpdateQuantity, onDelete }) => {
     const handleQuantityChange = (e) => {
@@ -10,21 +11,32 @@ const CartItem = ({ item, onUpdateQuantity, onDelete }) => {
         onDelete(item._id);
     };
 
+    const totalItemPrice = item.price * item.quantity;
+
     return (
-        <div className="cart-item">
-            <h3>{item.name}</h3>
-            <p>Price: ${item.price.toFixed(2)}</p>
-            <p>
-                Quantity:
-                <input
+        <Row className="align-items-center mb-3">
+            <Col xs={3}>
+                <img src={process.env.PUBLIC_URL + item.imgUrl} alt={item.name} className="img-fluid" />
+            </Col>
+            <Col xs={3}>
+                <h5>{item.name}</h5>
+                <p>Price: ${item.price.toFixed(2)}</p>
+            </Col>
+            <Col xs={2}>
+                <Form.Control
                     type="number"
                     value={item.quantity}
                     onChange={handleQuantityChange}
                     min="1"
                 />
-            </p>
-            <button onClick={handleDelete}>Remove</button>
-        </div>
+            </Col>
+            <Col xs={2}>
+                <p>Total: ${totalItemPrice.toFixed(2)}</p>
+            </Col>
+            <Col xs={2}>
+                <Button variant="danger" onClick={handleDelete}>Remove</Button>
+            </Col>
+        </Row>
     );
 };
 

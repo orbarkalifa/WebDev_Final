@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
 import Item from './Item';
-
 
 const ItemsList = ({ addToCart }) => {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
-        // Fetch items data from API
         fetch('http://localhost:8080/items')
             .then(response => response.json())
             .then(data => setItems(data))
@@ -14,14 +13,16 @@ const ItemsList = ({ addToCart }) => {
     }, []);
 
     return (
-        <div>
-            <h1>Items Collection</h1>
-            <div className="items-list">
+        <Container>
+            <h1 className="my-4">Items Collection</h1>
+            <Row>
                 {items.map(item => (
-                    <Item key={item._id} item={item} addToCart={addToCart} />
+                    <Col key={item._id} xs={12} sm={6} md={4} lg={3}>
+                        <Item item={item} addToCart={addToCart} />
+                    </Col>
                 ))}
-            </div>
-        </div>
+            </Row>
+        </Container>
     );
 };
 

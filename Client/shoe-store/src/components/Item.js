@@ -1,4 +1,5 @@
 import React from 'react';
+import { Card, Button } from 'react-bootstrap';
 
 const Item = ({ item, addToCart }) => {
     const handleAddToCart = () => {
@@ -6,14 +7,16 @@ const Item = ({ item, addToCart }) => {
     };
 
     return (
-        <div className="item">
-            <img src={item.imageUrl} alt={item.name} className="item-image" />
-            <h2>{item.name}</h2>
-            <p>{item.description}</p>
-            <p>Price: ${item.price.toFixed(2)}</p>
-            <p>Stock: {item.stock}</p>
-            <button onClick={handleAddToCart}>Add to Cart</button>
-        </div>
+        <Card className="mb-4" style={{ width: '18rem' }}>
+            <Card.Img variant="top" src={process.env.PUBLIC_URL + item.imgUrl} alt={item.name} />
+            <Card.Body>
+                <Card.Title>{item.name}</Card.Title>
+                <Card.Text>{item.description}</Card.Text>
+                <Card.Text>Price: ${item.price.toFixed(2)}</Card.Text>
+                <Card.Text>Stock: {item.stock}</Card.Text>
+                <Button variant="primary" onClick={handleAddToCart}>Add to Cart</Button>
+            </Card.Body>
+        </Card>
     );
 };
 

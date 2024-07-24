@@ -1,24 +1,27 @@
 import React from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
 import CartItem from './CartItem';
-import './Cart.css';
 
 const Cart = ({ cart, updateQuantity, deleteItem, totalPrice }) => {
     return (
-        <div className="cart">
-            <h2>Shopping Cart</h2>
-            {cart.map(item => (
-                <CartItem
-                    key={item._id}
-                    item={item}
-                    onUpdateQuantity={updateQuantity}
-                    onDelete={deleteItem}
-                />
-            ))}
-            <div className="cart-total">
-                <strong>Total: </strong>
-                <span>${totalPrice.toFixed(2)}</span>
-            </div>
-        </div>
+        <Container>
+            <h2 className="my-4">Shopping Cart</h2>
+            <Row>
+                {cart.map(item => (
+                    <CartItem
+                        key={item._id}
+                        item={item}
+                        onUpdateQuantity={updateQuantity}
+                        onDelete={deleteItem}
+                    />
+                ))}
+            </Row>
+            <Row className="justify-content-end">
+                <Col xs={12} md={4} className="text-right">
+                    <h3>Total: ${totalPrice.toFixed(2)}</h3>
+                </Col>
+            </Row>
+        </Container>
     );
 };
 
