@@ -1,56 +1,57 @@
-// src/components/Orders.js
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
+import Navbar from './Navbar';
+import Cart from './Cart';
 
-function Orders() {
-    const [itemId, setItemId] = useState('');
-    const [quantity, setQuantity] = useState(1);
-    const [message, setMessage] = useState('');
+const saveCartToLocalStorage = (cart) => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+};
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+const loadCartFromLocalStorage = () => {
+    const cart = localStorage.getItem('cart');
+    return cart ? JSON.parse(cart) : [];
+};
 
-        const order = {
+function Order() {
+    const initialCart = loadCartFromLocalStorage();
+    const [cart, setCart] = useState(initialCart);
+    const [showCart, setShowCart] = useState(false);
 
-        };
+    useEffect(() => {
+        saveCartToLocalStorage(cart);
+    }, [cart]);
 
-        try {
-            const response = await axios.post('http://localhost:8080/order', order);
-            setMessage(`Order created successfully: ${response.data._id}`);
-        } catch (error) {
-            console.error('There was an error creating the order!', error);
-            setMessage('Error creating order');
-        }
+    const updateQuantity = (id, quantity) => {
+        setCart(cart.map(item => (item._id === id ? { ...item, quantity } : item)));
     };
 
+    const deleteItem = (id) => {
+        setCart(cart.filter(item => item._id !== id));
+    };
+
+    const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+
     return (
-        <div>
-            <h1>Submit a New Order</h1>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Item ID:</label>
-                    <input
-                        type="text"
-                        value={itemId}
-                        onChange={(e) => setItemId(e.target.value)}
-                        required
+        <Container>
+            <Navbar cart={cart} toggleCart={() => setShowCart(!showCart)} />
+            <Row>
+                <Col>
+                    {/* Order details and form go here */}
+                </Col>
+                <Col md={4}>
+                    <Cart
+                        cart={cart}
+                        updateQuantity={updateQuantity}
+                        deleteItem={deleteItem}
+                        totalPrice={totalPrice}
+                        show={showCart}
+                        onClose={() => setShowCart(false)}
                     />
-                </div>
-                <div>
-                    <label>Quantity:</label>
-                    <input
-                        type="number"
-                        value={quantity}
-                        onChange={(e) => setQuantity(e.target.value)}
-                        min="1"
-                        required
-                    />
-                </div>
-                <button type="submit">Submit Order</button>
-            </form>
-            {message && <p>{message}</p>}
-        </div>
+                </Col>
+            </Row>
+            hhassdadas
+        </Container>
     );
 }
 
-export default Orders;
+export default Order;

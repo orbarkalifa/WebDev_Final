@@ -1,27 +1,34 @@
 import React from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Offcanvas, ListGroup } from 'react-bootstrap';
 import CartItem from './CartItem';
+import './Cart.css'; // Ensure you add styles for fixed or floating cart
 
-const Cart = ({ cart, updateQuantity, deleteItem, totalPrice }) => {
+const Cart = ({ cart, updateQuantity, deleteItem, totalPrice, show, onClose }) => {
     return (
-        <Container>
-            <h2 className="my-4">Shopping Cart</h2>
-            <Row>
-                {cart.map(item => (
-                    <CartItem
-                        key={item._id}
-                        item={item}
-                        onUpdateQuantity={updateQuantity}
-                        onDelete={deleteItem}
-                    />
-                ))}
-            </Row>
-            <Row className="justify-content-end">
-                <Col xs={12} md={4} className="text-right">
-                    <h3>Total: ${totalPrice.toFixed(2)}</h3>
-                </Col>
-            </Row>
-        </Container>
+        <Offcanvas show={show} onHide={onClose} placement="end" className="cart-offcanvas">
+            <Offcanvas.Header closeButton>
+                <Offcanvas.Title>Shopping Cart</Offcanvas.Title>
+            </Offcanvas.Header>
+            <Offcanvas.Body>
+                {cart.length === 0 ? (
+                    <p>Your cart is empty</p>
+                ) : (
+                    <ListGroup>
+                        {cart.map(item => (
+                            <CartItem
+                                key={item._id}
+                                item={item}
+                                onUpdateQuantity={updateQuantity}
+                                onDelete={deleteItem}
+                            />
+                        ))}
+                        <ListGroup.Item className="text-right">
+                            <h5>Total: ${totalPrice.toFixed(2)}</h5>
+                        </ListGroup.Item>
+                    </ListGroup>
+                )}
+            </Offcanvas.Body>
+        </Offcanvas>
     );
 };
 

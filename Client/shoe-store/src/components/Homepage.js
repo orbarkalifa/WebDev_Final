@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import Cart from './Cart';
+import Navbar from './Navbar';
 import ItemsList from './ItemsList';
+import Cart from './Cart';
 
 const saveCartToLocalStorage = (cart) => {
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -15,6 +16,7 @@ const loadCartFromLocalStorage = () => {
 function Homepage() {
     const initialCart = loadCartFromLocalStorage();
     const [cart, setCart] = useState(initialCart);
+    const [showCart, setShowCart] = useState(false);
 
     useEffect(() => {
         saveCartToLocalStorage(cart);
@@ -47,20 +49,20 @@ function Homepage() {
 
     return (
         <Container>
-            <h1 className="my-4">Welcome to the Homepage!</h1>
+            <Navbar cart={cart} toggleCart={() => setShowCart(!showCart)} />
             <Row>
                 <Col md={8}>
                     <ItemsList addToCart={addToCart} />
                 </Col>
-                <Col md={4}>
-                    <Cart
-                        cart={cart}
-                        updateQuantity={updateQuantity}
-                        deleteItem={deleteItem}
-                        totalPrice={totalPrice}
-                    />
-                </Col>
             </Row>
+            <Cart
+                cart={cart}
+                updateQuantity={updateQuantity}
+                deleteItem={deleteItem}
+                totalPrice={totalPrice}
+                show={showCart}
+                onClose={() => setShowCart(false)}
+            />
         </Container>
     );
 }
