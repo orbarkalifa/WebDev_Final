@@ -11,12 +11,12 @@ mongoose.connect('mongodb+srv://Student:webdev2024student@cluster0.uqyflra.mongo
 
 app.use(express.json());
 
-// Homepage Route
+// Endpoints
+
 app.get('/', (req, res) => {
-    res.send('Welcome to the Homepage!');
+
 });
 
-// Endpoint to create a new order
 app.post('/order', async (req, res) => {
     const order = new Order(req.body);
     try {
