@@ -49,7 +49,7 @@ function Homepage() {
     return (
         <div>
             <h1>Welcome to the Homepage!</h1>
-            <ItemsList />
+            <ItemsList addToCart={addToCart} />
             <Cart
                 cart={cart}
                 updateQuantity={updateQuantity}

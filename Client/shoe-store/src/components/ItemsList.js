@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Item from './Item';
 
+
 const ItemsList = ({ addToCart }) => {
     const [items, setItems] = useState([]);
 
