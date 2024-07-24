@@ -1,17 +1,20 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors'); // Import cors
+
 const Data = require('./models/dataModel'); // Import your model
 
 const app = express();
 const port = 8080;
 
-mongoose.connect('mongodb+srv://Student:webdev2024student@cluster0.uqyflra.mongodb.net/webdev2024', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
+mongoose.connect('mongodb+srv://Student:webdev2024student@cluster0.uqyflra.mongodb.net/webdev2024');
 
 // Middleware
 app.use(express.json());
+
+// Use cors middleware
+app.use(cors());
+
 
 // Endpoints
 

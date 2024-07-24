@@ -47,6 +47,8 @@ const dataSchema = new mongoose.Schema({
             type: Date
         }
     }
+}, {
+    collection: 'final_Or_Daniel' // Specify the collection name here
 });
 
 // Create a model based on the schema

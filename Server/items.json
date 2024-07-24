@@ -1,0 +1,65 @@
+[
+    {
+        "type": "item",
+        "name": "Running Shoes",
+        "price": 89.99,
+        "description": "Comfortable running shoes for all terrains.",
+        "stock": 50
+    },
+    {
+        "type": "item",
+        "name": "Basketball Shoes",
+        "price": 120.0,
+        "description": "High-performance basketball shoes with ankle support.",
+        "stock": 30
+    },
+    {
+        "type": "item",
+        "name": "Formal Shoes",
+        "price": 99.99,
+        "description": "Elegant formal shoes for business and events.",
+        "stock": 20
+    },
+    {
+        "type": "item",
+        "name": "Sneakers",
+        "price": 69.99,
+        "description": "Casual sneakers for everyday wear.",
+        "stock": 40
+    },
+    {
+        "type": "item",
+        "name": "Sandals",
+        "price": 39.99,
+        "description": "Comfortable sandals for summer.",
+        "stock": 60
+    },
+    {
+        "type": "item",
+        "name": "Boots",
+        "price": 109.99,
+        "description": "Durable boots for outdoor activities.",
+        "stock": 25
+    },
+    {
+        "type": "item",
+        "name": "Loafers",
+        "price": 79.99,
+        "description": "Stylish loafers for casual and semi-formal occasions.",
+        "stock": 15
+    },
+    {
+        "type": "item",
+        "name": "Slip-ons",
+        "price": 49.99,
+        "description": "Easy-to-wear slip-ons for comfort and convenience.",
+        "stock": 45
+    },
+    {
+        "type": "item",
+        "name": "Hiking Shoes",
+        "price": 139.99,
+        "description": "Sturdy hiking shoes for rugged trails.",
+        "stock": 35
+    }
+]
