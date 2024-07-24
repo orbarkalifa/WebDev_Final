@@ -1,25 +1,32 @@
+// index.js
 const express = require('express');
 const mongoose = require('mongoose');
+const Order = require('./models/Order'); // Assuming you have Order model
+
 const app = express();
 const port = 5000;
 
-app.use(express.json());
-
-// Connect to MongoDB
-mongoose.connect('mongodb+srv://Student:webdev2024student@cluster0.uqyflra.mongodb.net/webdev2024', {
+mongoose.connect('mongodb://localhost:27017/mydatabase', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => {
-    console.log('Connected to MongoDB');
+app.use(express.json());
+
+// Homepage Route
+app.get('/', (req, res) => {
+    res.send('Welcome to the Homepage!');
 });
 
-// Basic route
-app.get('/', (req, res) => {
-    res.send('Hello World!');
+// Endpoint to create a new order
+app.post('/orders', async (req, res) => {
+    const order = new Order(req.body);
+    try {
+        const newOrder = await order.save();
+        res.status(201).json(newOrder);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
 });
 
 app.listen(port, () => {
