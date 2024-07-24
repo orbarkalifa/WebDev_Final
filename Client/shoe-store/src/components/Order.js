@@ -11,17 +11,11 @@ function Orders() {
         e.preventDefault();
 
         const order = {
-            items: [
-                {
-                    itemId,
-                    quantity: parseInt(quantity),
-                },
-            ],
-            totalPrice: 0, // Assuming the backend calculates the total price
+
         };
 
         try {
-            const response = await axios.post('http://localhost:5000/orders', order);
+            const response = await axios.post('http://localhost:8080/order', order);
             setMessage(`Order created successfully: ${response.data._id}`);
         } catch (error) {
             console.error('There was an error creating the order!', error);
