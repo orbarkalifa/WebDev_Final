@@ -1,31 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import Navbar from './Navbar';
 import ItemsList from './ItemsList';
 import Cart from './Cart';
 
-const saveCartToLocalStorage = (cart) => {
-    localStorage.setItem('cart', JSON.stringify(cart));
-};
-
-const loadCartFromLocalStorage = () => {
-    const cart = localStorage.getItem('cart');
-    return cart ? JSON.parse(cart) : [];
-};
-
-function Homepage() {
-    const initialCart = loadCartFromLocalStorage();
-    const [cart, setCart] = useState(initialCart);
-    const [showCart, setShowCart] = useState(false);
+// Custom hook for cart state management
+const useCart = () => {
+    const [cart, setCart] = useState(() => {
+        const savedCart = localStorage.getItem('cart');
+        return savedCart ? JSON.parse(savedCart) : [];
+    });
 
     useEffect(() => {
-        saveCartToLocalStorage(cart);
+        localStorage.setItem('cart', JSON.stringify(cart));
     }, [cart]);
 
-    const addToCart = (item) => {
-        setCart((prevCart) => {
-            const itemInCart = prevCart.find(cartItem => cartItem._id === item._id);
-            if (itemInCart) {
+    const addToCart = useCallback((item) => {
+        setCart(prevCart => {
+            const existingItem = prevCart.find(cartItem => cartItem._id === item._id);
+            if (existingItem) {
                 return prevCart.map(cartItem =>
                     cartItem._id === item._id
                         ? { ...cartItem, quantity: cartItem.quantity + 1 }
@@ -35,15 +28,31 @@ function Homepage() {
                 return [...prevCart, { ...item, quantity: 1 }];
             }
         });
-    };
+    }, []);
 
-    const updateQuantity = (id, quantity) => {
-        setCart(cart.map(item => (item._id === id ? { ...item, quantity } : item)));
-    };
+    const updateQuantity = useCallback((id, quantity) => {
+        setCart(prevCart =>
+            prevCart.map(item =>
+                item._id === id ? { ...item, quantity } : item
+            )
+        );
+    }, []);
 
-    const deleteItem = (id) => {
-        setCart(cart.filter(item => item._id !== id));
+    const deleteItem = useCallback((id) => {
+        setCart(prevCart => prevCart.filter(item => item._id !== id));
+    }, []);
+
+    return {
+        cart,
+        addToCart,
+        updateQuantity,
+        deleteItem
     };
+};
+
+function Homepage() {
+    const { cart, addToCart, updateQuantity, deleteItem } = useCart();
+    const [showCart, setShowCart] = useState(false);
 
     const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
 

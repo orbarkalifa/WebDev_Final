@@ -3,6 +3,9 @@ import { Navbar as BootstrapNavbar, Nav, Button } from 'react-bootstrap';
 import { FaShoppingCart } from 'react-icons/fa';
 
 const Navbar = ({ cart, toggleCart }) => {
+    // Calculate total quantity in the cart
+    const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
+
     return (
         <BootstrapNavbar bg="light" expand="lg" className="mb-4">
             <BootstrapNavbar.Brand href="#home">My Store</BootstrapNavbar.Brand>
@@ -13,7 +16,7 @@ const Navbar = ({ cart, toggleCart }) => {
                     <Nav.Link href="/order">Order</Nav.Link>
                 </Nav>
                 <Button variant="outline-primary" onClick={toggleCart}>
-                    <FaShoppingCart /> Cart ({cart.length})
+                    <FaShoppingCart /> Cart ({totalQuantity})
                 </Button>
             </BootstrapNavbar.Collapse>
         </BootstrapNavbar>

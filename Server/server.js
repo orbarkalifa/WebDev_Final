@@ -40,7 +40,7 @@ app.post('/items', async (req, res) => {
 });
 
 // Get all orders
-app.get('/orders', async (req, res) => {
+app.get('/order', async (req, res) => {
     try {
         const orders = await Data.find({ type: 'order' });
         res.json(orders);
@@ -50,7 +50,7 @@ app.get('/orders', async (req, res) => {
 });
 
 // Create a new order
-app.post('/orders', async (req, res) => {
+app.post('/order', async (req, res) => {
     const order = new Data({ ...req.body, type: 'order' });
     try {
         const newOrder = await order.save();

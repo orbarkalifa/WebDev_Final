@@ -1,15 +1,17 @@
 import React from 'react';
-import { Offcanvas, ListGroup } from 'react-bootstrap';
+import { Modal, ListGroup, Button } from 'react-bootstrap';
 import CartItem from './CartItem';
-import './Cart.css'; // Ensure you add styles for fixed or floating cart
+import { useNavigate } from 'react-router-dom';
 
 const Cart = ({ cart, updateQuantity, deleteItem, totalPrice, show, onClose }) => {
+
+    const navigate = useNavigate();
     return (
-        <Offcanvas show={show} onHide={onClose} placement="end" className="cart-offcanvas">
-            <Offcanvas.Header closeButton>
-                <Offcanvas.Title>Shopping Cart</Offcanvas.Title>
-            </Offcanvas.Header>
-            <Offcanvas.Body>
+        <Modal show={show} onHide={onClose} size="lg" centered>
+            <Modal.Header closeButton>
+                <Modal.Title>Shopping Cart</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
                 {cart.length === 0 ? (
                     <p>Your cart is empty</p>
                 ) : (
@@ -22,13 +24,21 @@ const Cart = ({ cart, updateQuantity, deleteItem, totalPrice, show, onClose }) =
                                 onDelete={deleteItem}
                             />
                         ))}
-                        <ListGroup.Item className="text-right">
+                        <ListGroup.Item className="text-end">
                             <h5>Total: ${totalPrice.toFixed(2)}</h5>
                         </ListGroup.Item>
                     </ListGroup>
                 )}
-            </Offcanvas.Body>
-        </Offcanvas>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant='primary' onClick={() => { navigate('/order'); onClose(); }} >
+                    Order Now
+                </Button>
+                <Button variant="secondary" onClick={onClose}>
+                    Close
+                </Button>
+            </Modal.Footer>
+        </Modal>
     );
 };
 

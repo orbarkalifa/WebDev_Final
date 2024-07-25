@@ -17,7 +17,7 @@ const ItemsList = ({ addToCart }) => {
             <h1 className="my-4">Items Collection</h1>
             <Row>
                 {items.map(item => (
-                    <Col key={item._id} xs={12} sm={6} md={4} lg={3}>
+                    <Col key={item._id} xs={12} sm={6} md={4} lg={4}>
                         <Item item={item} addToCart={addToCart} />
                     </Col>
                 ))}
