@@ -34,9 +34,7 @@ const Cart = ({ cart, updateQuantity, deleteItem, totalPrice, show, onClose }) =
                 <Button variant='primary' onClick={() => { navigate('/order'); onClose(); }} >
                     Order Now
                 </Button>
-                <Button variant="secondary" onClick={onClose}>
-                    Close
-                </Button>
+
             </Modal.Footer>
         </Modal>
     );

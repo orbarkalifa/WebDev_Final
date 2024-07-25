@@ -51,15 +51,44 @@ app.get('/order', async (req, res) => {
 
 // Create a new order
 app.post('/order', async (req, res) => {
-    const order = new Data({ ...req.body, type: 'order' });
+
+
     try {
-        const newOrder = await order.save();
-        res.status(201).json(newOrder);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
+
+
+        const orderNumber = await getNextOrderNumber();
+        const order = new Data({
+            ...req.body, type: 'order', orderDate: new Date(), orderNumber
+        });
+        console.log({
+            ...req.body, type: 'order', orderDate: new Date(), orderNumber
+        });
+
+
+
+        await order.save();
+        res.status(201).json({ orderNumber }); // Send the order number back to the client
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
+
+
+// Helper functions
+
+const getNextOrderNumber = async () => {
+    // Find the highest order number
+    const lastOrder = await Data.findOne({ type: 'order' }).sort({ 'orderDetails.orderNumber': -1 }).exec();
+
+    // If no orders are found, start with 1
+    if (!lastOrder) {
+        return 1;
+    }
+
+    // Return the next order number
+    return lastOrder.orderDetails.orderNumber + 1;
+};

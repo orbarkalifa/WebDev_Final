@@ -8,14 +8,34 @@ import useCart from "../hooks/useCart";
 
 
 function Order() {
-    const { cart, updateQuantity, deleteItem } = useCart();
+    const { cart, updateQuantity, deleteItem, emptyCart } = useCart();
     const [showCart, setShowCart] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         phone: '',
-        address: ''
+        address: '',
+        deliveryType: 14,
     });
+    const [errors, setErrors] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        address: ''
+
+    });
+    const validateForm = () => {
+        const newErrors = {};
+        if (!formData.name) newErrors.name = 'Name is required';
+        if (!formData.email) newErrors.email = 'Email is required';
+        else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
+        if (!formData.phone) newErrors.phone = 'Phone number is required';
+        if (!formData.address) newErrors.address = 'Address is required';
+
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -26,14 +46,14 @@ function Order() {
     };
 
     const handleSubmit = (e) => {
-        e.preventDefault();
 
+        e.preventDefault();
+        if (!validateForm()) return;
         const body = {
             "orderDetails": {
                 "items": cart,
                 "totalPrice": totalPrice,
                 "customer": formData,
-                "orderDate": Date.now()
             }
         };
         axios({
@@ -43,11 +63,13 @@ function Order() {
         })
             .then(function (response) {
                 console.log(response);
-            })
+            }).then()
             .catch(function (error) {
                 console.log(error);
             });
         console.log('Form Data:', formData);
+
+        emptyCart();
     };
 
 
@@ -56,71 +78,104 @@ function Order() {
     return (
         <Container>
             <Navbar cart={cart} toggleCart={() => setShowCart(!showCart)} />
+
             <Row>
 
-                <Col>
-                    <Col md={8}>
-                        {cart.map(item => item.quantity > 0 ? <OrderItem key={item._id} item={item} /> : '')}
-                    </Col>
-                </Col>
-                <Col className="justify-content-md-center">
-                    <Col md={6}>
-                        <h2>Contact Form</h2>
-                        <Form onSubmit={handleSubmit}>
-                            <Form.Group controlId="formName">
-                                <Form.Label>Name</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Enter your name"
-                                    name="name"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </Form.Group>
+                {cart.map(item => item.quantity > 0 && (
+                    <Row className="justify-content-center">
 
-                            <Form.Group controlId="formEmail">
-                                <Form.Label>Email address</Form.Label>
-                                <Form.Control
-                                    type="email"
-                                    placeholder="Enter your email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </Form.Group>
+                        <Col lg={6} key={item._id} className="mb-3">
+                            <OrderItem item={item} />
+                        </Col>
+                    </Row>
 
-                            <Form.Group controlId="formPhone">
-                                <Form.Label>Phone Number</Form.Label>
-                                <Form.Control
-                                    type="tel"
-                                    placeholder="Enter your phone number"
-                                    name="phone"
-                                    value={formData.phone}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </Form.Group>
+                ))}
 
-                            <Form.Group controlId="formAddress">
-                                <Form.Label>Address</Form.Label>
-                                <Form.Control
-                                    as="textarea"
-                                    rows={3}
-                                    placeholder="Enter your address"
-                                    name="address"
-                                    value={formData.address}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </Form.Group>
+            </Row>
+            <Row className="justify-content-md-center">
+                <Col md={6}>
+                    <h2>Contact Form</h2>
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group controlId="formName">
+                            <Form.Label>Name</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter your name"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleChange}
+                                isInvalid={errors.name}
+                                required
+                            />
+                        </Form.Group>
 
-                            <Button variant="primary" type="submit">
-                                Submit
-                            </Button>
-                        </Form>
-                    </Col>
+                        <Form.Group controlId="formEmail">
+                            <Form.Label>Email address</Form.Label>
+                            <Form.Control
+                                type="email"
+                                placeholder="Enter your email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                isInvalid={errors.email}
+                                required
+                            />
+                        </Form.Group>
+
+                        <Form.Group controlId="formPhone">
+                            <Form.Label>Phone Number</Form.Label>
+                            <Form.Control
+                                type="tel"
+                                placeholder="Enter your phone number"
+                                name="phone"
+                                value={formData.phone}
+                                onChange={handleChange}
+                                isInvalid={errors.phone}
+                                required
+                            />
+                        </Form.Group>
+
+                        <Form.Group controlId="formAddress">
+                            <Form.Label>Address</Form.Label>
+                            <Form.Control
+                                as="textarea"
+                                rows={3}
+                                placeholder="Enter your address"
+                                name="address"
+                                value={formData.address}
+                                onChange={handleChange}
+                                isInvalid={errors.address}
+                                required
+                            />
+                        </Form.Group>
+                        <Form.Group >
+                            <Form.Label>Delivery Type</Form.Label>
+                            <Form.Check
+                                type="radio"
+                                label="Standard (14 days)"
+                                name="deliveryType"
+                                value='14'
+                                checked={formData.deliveryType === '14'}
+                                onChange={handleChange}
+                                required
+                            />
+                            <Form.Check
+                                type="radio"
+                                label="Premium (3 days)"
+                                name="deliveryType"
+                                value='3'
+                                checked={formData.deliveryType === '3'}
+                                onChange={handleChange}
+                                required
+                            />
+
+                        </Form.Group>
+
+                        <h3>total price:${formData.deliveryType === '3' ? (totalPrice + 30).toFixed(2) : totalPrice.toFixed(2)}</h3>
+                        <Button variant="primary" type="submit">
+                            Submit
+                        </Button>
+                    </Form>
                 </Col>
             </Row>
             <Cart

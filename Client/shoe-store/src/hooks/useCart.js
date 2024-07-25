@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
 
-
 // Custom hook for cart state management
 const useCart = () => {
     const [cart, setCart] = useState(() => {
@@ -27,6 +26,10 @@ const useCart = () => {
         });
     }, []);
 
+    const emptyCart = () => {
+        setCart([]);
+    };
+
     const updateQuantity = useCallback((id, quantity) => {
         setCart(prevCart =>
             prevCart.map(item =>
@@ -43,7 +46,8 @@ const useCart = () => {
         cart,
         addToCart,
         updateQuantity,
-        deleteItem
+        deleteItem,
+        emptyCart
     };
 };
 

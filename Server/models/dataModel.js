@@ -44,10 +44,17 @@ const dataSchema = new mongoose.Schema({
             },
             address: {
                 type: String
+            },
+            deliveryType: {
+                type: Number,
+                default: 14
             }
         },
         orderDate: {
             type: Date
+        },
+        orderNumber: {
+            type: Number
         }
     }
 }, {
