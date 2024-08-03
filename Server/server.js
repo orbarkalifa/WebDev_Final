@@ -60,9 +60,6 @@ app.post('/order', async (req, res) => {
         const order = new Data({
             ...req.body, type: 'order', orderDate: new Date(), orderNumber
         });
-        console.log({
-            ...req.body, type: 'order', orderDate: new Date(), orderNumber
-        });
 
 
 

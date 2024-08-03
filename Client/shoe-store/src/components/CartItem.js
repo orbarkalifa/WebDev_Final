@@ -16,7 +16,7 @@ const CartItem = ({ item, onUpdateQuantity, onDelete }) => {
     return (
         <Row className="align-items-center mb-3">
             <Col xs={3}>
-                <img src={process.env.PUBLIC_URL + item.imgUrl} alt={item.name} className="img-fluid" />
+                <img src={item.imgUrl} alt={item.name} className="img-fluid" />
             </Col>
             <Col xs={3}>
                 <h5>{item.name}</h5>

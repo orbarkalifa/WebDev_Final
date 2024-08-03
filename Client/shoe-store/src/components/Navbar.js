@@ -13,11 +13,11 @@ const Navbar = ({ cart, toggleCart }) => {
             <BootstrapNavbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
                     <Nav.Link href="/">Home</Nav.Link>
-                    <Nav.Link href="/order">Order</Nav.Link>
+                    <Button variant="outline-primary" onClick={toggleCart}>
+                        <FaShoppingCart /> Cart ({totalQuantity})
+                    </Button>
                 </Nav>
-                <Button variant="outline-primary" onClick={toggleCart}>
-                    <FaShoppingCart /> Cart ({totalQuantity})
-                </Button>
+
             </BootstrapNavbar.Collapse>
         </BootstrapNavbar>
     );
