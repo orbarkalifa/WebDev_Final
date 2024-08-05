@@ -27,11 +27,13 @@ function Order() {
     const validateForm = () => {
         const newErrors = {};
         if (!formData.name) newErrors.name = 'Name is required';
+        else if (/\d/.test(formData.name)) newErrors.name = 'Name cannot contain numbers';
         if (!formData.email) newErrors.email = 'Email is required';
         else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
         if (!formData.phone) newErrors.phone = 'Phone number is required';
+        else if (!/^\d{10}$/.test(formData.phone.replace(/-/g, ''))) newErrors.phone = 'Phone number must be 10 digits';
         if (!formData.address) newErrors.address = 'Address is required';
-
+        if (cart.length === 0) newErrors.cartSize = 'Cannot order an empty cart';
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -48,8 +50,15 @@ function Order() {
     const handleSubmit = (e) => {
 
         e.preventDefault();
-        if (!validateForm()) return;
-        const body = {
+
+        if (!validateForm()) {
+            if (errors.cartSize) {
+                alert(errors.cartSize);
+                window.location.href = '/';
+            }
+            return;
+
+        } const body = {
             "orderDetails": {
                 "items": cart,
                 "totalPrice": totalPrice,
@@ -82,7 +91,7 @@ function Order() {
             <Row>
 
                 {cart.map(item => item.quantity > 0 && (
-                    <Row className="justify-content-center">
+                    <Row className="justify-content-center" key={item._id}>
 
                         <Col lg={6} key={item._id} className="mb-3">
                             <OrderItem item={item} />
@@ -108,6 +117,7 @@ function Order() {
                                 required
                             />
                         </Form.Group>
+                        {errors.name && <span className="error">{errors.name}</span>}
 
                         <Form.Group controlId="formEmail">
                             <Form.Label>Email address</Form.Label>
@@ -121,6 +131,8 @@ function Order() {
                                 required
                             />
                         </Form.Group>
+                        {errors.email && <span className="error">{errors.email}</span>}
+
 
                         <Form.Group controlId="formPhone">
                             <Form.Label>Phone Number</Form.Label>
@@ -134,6 +146,8 @@ function Order() {
                                 required
                             />
                         </Form.Group>
+                        {errors.phone && <span className="error">{errors.phone}</span>}
+
 
                         <Form.Group controlId="formAddress">
                             <Form.Label>Address</Form.Label>
@@ -148,6 +162,8 @@ function Order() {
                                 required
                             />
                         </Form.Group>
+                        {errors.address && <span className="error">{errors.address}</span>}
+
                         <Form.Group >
                             <Form.Label>Delivery Type</Form.Label>
                             <Form.Check
@@ -168,13 +184,15 @@ function Order() {
                                 onChange={handleChange}
                                 required
                             />
-
                         </Form.Group>
+                        {errors.deliveryType && <span className="error">{errors.deliveryType}</span>}
+
 
                         <h3>total price:${formData.deliveryType === '3' ? (totalPrice + 30).toFixed(2) : totalPrice.toFixed(2)}</h3>
                         <Button variant="primary" type="submit">
                             Submit
                         </Button>
+
                     </Form>
                 </Col>
             </Row>

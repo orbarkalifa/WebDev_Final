@@ -51,21 +51,28 @@ app.get('/order', async (req, res) => {
 
 // Create a new order
 app.post('/order', async (req, res) => {
-
-
     try {
-
-
+        // Generate a new order number
         const orderNumber = await getNextOrderNumber();
+
+        // Create a new order object with additional details
         const order = new Data({
-            ...req.body, type: 'order', orderDate: new Date(), orderNumber
+            ...req.body,
+            type: 'order',
+            orderDate: new Date(),
+            orderNumber
         });
 
-
-
+        // Save the order to the database
         await order.save();
-        res.status(201).json({ orderNumber }); // Send the order number back to the client
+
+        // Respond with a confirmation message and order number
+        res.status(201).json({
+            message: 'Order confirmed',
+            orderNumber
+        });
     } catch (error) {
+        // Handle any errors that occur during order creation
         res.status(500).json({ error: 'Internal server error' });
     }
 });
@@ -78,14 +85,21 @@ app.listen(port, () => {
 // Helper functions
 
 const getNextOrderNumber = async () => {
-    // Find the highest order number
-    const lastOrder = await Data.findOne({ type: 'order' }).sort({ 'orderDetails.orderNumber': -1 }).exec();
+    try {
+        // Find the highest order number from the nested orderDetails
+        const lastOrder = await Data.findOne({ 'orderDetails.orderNumber': { $exists: true } })
+            .sort({ 'orderDetails.orderNumber': -1 })
+            .exec();
 
-    // If no orders are found, start with 1
-    if (!lastOrder) {
-        return 1;
+        // If no orders are found, start with 1
+        if (!lastOrder || !lastOrder.orderDetails || !lastOrder.orderDetails.orderNumber) {
+            return 1;
+        }
+
+        // Return the next order number
+        return lastOrder.orderDetails.orderNumber + 1;
+    } catch (error) {
+        console.error('Error fetching the next order number:', error);
+        throw error;
     }
-
-    // Return the next order number
-    return lastOrder.orderDetails.orderNumber + 1;
 };
