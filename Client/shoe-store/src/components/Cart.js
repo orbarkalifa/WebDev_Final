@@ -1,11 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, ListGroup, Button } from 'react-bootstrap';
 import CartItem from './CartItem';
 import { useNavigate } from 'react-router-dom';
 
 const Cart = ({ cart, updateQuantity, deleteItem, totalPrice, show, onClose }) => {
 
+    const [error, setError] = useState('');
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (cart.length === 0) {
+            setError('Cannot place an order with an empty cart.');
+        } else {
+            setError(''); // Clear the error message when the cart is not empty
+        }
+    }, [cart]);
+
+
+
     return (
         <Modal show={show} onHide={onClose} size="lg" centered>
             <Modal.Header closeButton>
@@ -31,12 +43,24 @@ const Cart = ({ cart, updateQuantity, deleteItem, totalPrice, show, onClose }) =
                 )}
             </Modal.Body>
             <Modal.Footer>
-                <Button variant='primary' onClick={() => { navigate('/order'); onClose(); }} >
+                {error && <span style={{ color: 'red', fontWeight: 'bold', marginLeft: '10px' }}>{error}</span>}
+
+                <Button
+                    variant='primary'
+                    onClick={() => {
+
+                        navigate('/order');
+                        onClose();
+                    }}
+                    disabled={cart.length === 0}
+                >
                     Order Now
                 </Button>
 
+
+
             </Modal.Footer>
-        </Modal>
+        </Modal >
     );
 };
 
