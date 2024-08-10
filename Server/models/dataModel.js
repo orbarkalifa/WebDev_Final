@@ -42,10 +42,6 @@ const dataSchema = new mongoose.Schema({
             email: {
                 type: String
             },
-
-            phone: {
-                type: String
-            },
             address: {
                 type: String
             },
@@ -62,7 +58,7 @@ const dataSchema = new mongoose.Schema({
         }
     }
 }, {
-    collection: 'final_Or_Daniel' // collection name
+    collection: 'final_Or_Daniel' // Specify the collection name here
 });
 
 // Create a model based on the schema
