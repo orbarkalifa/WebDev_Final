@@ -6,7 +6,6 @@ import OrderItem from './OrderItem';
 import axios from 'axios';
 import useCart from "../hooks/useCart";
 
-
 function Order() {
     const { cart, updateQuantity, deleteItem, emptyCart } = useCart();
     const [showCart, setShowCart] = useState(false);
@@ -15,15 +14,11 @@ function Order() {
         email: '',
         phone: '',
         address: '',
-        deliveryType: 14,
+        deliveryType: '14',
     });
-    const [errors, setErrors] = useState({
-        name: '',
-        email: '',
-        phone: '',
-        address: ''
+    const [errors, setErrors] = useState({});
+    const [successMessage, setSuccessMessage] = useState('');
 
-    });
     const validateForm = () => {
         const newErrors = {};
         if (!formData.name) newErrors.name = 'Name is required';
@@ -41,46 +36,36 @@ function Order() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({
-            ...formData,
+        setFormData(prevFormData => ({
+            ...prevFormData,
             [name]: value
-        });
+        }));
     };
 
-    const handleSubmit = (e) => {
-
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!validateForm()) {
-            if (errors.cartSize) {
-                alert(errors.cartSize);
-                window.location.href = '/';
-            }
-            return;
+        if (!validateForm()) return;
 
-        } const body = {
-            "orderDetails": {
-                "items": cart,
-                "totalPrice": totalPrice,
-                "customer": formData,
-            }
-        };
-        axios({
-            method: 'post',
-            url: '/order',
-            data: body
-        })
-            .then(function (response) {
-                console.log(response);
-            }).then()
-            .catch(function (error) {
-                console.log(error);
-            });
-        console.log('Form Data:', formData);
+        try {
+            const body = {
+                orderDetails: {
+                    items: cart,
+                    totalPrice: totalPrice,
+                    customer: formData,
+                }
+            };
 
-        emptyCart();
+            const response = await axios.post('/order', body);
+
+            if (response.status === 201) {
+                setSuccessMessage(`Thank you for your order! Your order number is ${response.data.orderNumber}.`);
+                emptyCart();
+            }
+        } catch (error) {
+            console.error('Error submitting order:', error);
+        }
     };
-
 
     const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
@@ -88,19 +73,32 @@ function Order() {
         <Container>
             <Navbar cart={cart} toggleCart={() => setShowCart(!showCart)} />
 
-            <Row>
-
-                {cart.map(item => item.quantity > 0 && (
-                    <Row className="justify-content-center" key={item._id}>
-
-                        <Col lg={6} key={item._id} className="mb-3">
-                            <OrderItem item={item} />
-                        </Col>
-                    </Row>
-
-                ))}
-
+            <Row className="my-4">
+                {cart.length > 0 ? (
+                    cart.map(item => item.quantity > 0 && (
+                        <Row className="justify-content-center mb-3" key={item._id}>
+                            <Col lg={6}>
+                                <OrderItem item={item} />
+                            </Col>
+                        </Row>
+                    ))
+                ) : (
+                    <Col className="text-center">
+                        <p>Your cart is empty.</p>
+                    </Col>
+                )}
             </Row>
+
+            {successMessage && (
+                <Row className="justify-content-center mb-4">
+                    <Col md={6}>
+                        <div className="alert alert-success">
+                            {successMessage}
+                        </div>
+                    </Col>
+                </Row>
+            )}
+
             <Row className="justify-content-md-center">
                 <Col md={6}>
                     <h2>Contact Form</h2>
@@ -113,11 +111,13 @@ function Order() {
                                 name="name"
                                 value={formData.name}
                                 onChange={handleChange}
-                                isInvalid={errors.name}
+                                isInvalid={!!errors.name}
                                 required
                             />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.name}
+                            </Form.Control.Feedback>
                         </Form.Group>
-                        {errors.name && <span className="error">{errors.name}</span>}
 
                         <Form.Group controlId="formEmail">
                             <Form.Label>Email address</Form.Label>
@@ -127,12 +127,13 @@ function Order() {
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
-                                isInvalid={errors.email}
+                                isInvalid={!!errors.email}
                                 required
                             />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.email}
+                            </Form.Control.Feedback>
                         </Form.Group>
-                        {errors.email && <span className="error">{errors.email}</span>}
-
 
                         <Form.Group controlId="formPhone">
                             <Form.Label>Phone Number</Form.Label>
@@ -142,12 +143,13 @@ function Order() {
                                 name="phone"
                                 value={formData.phone}
                                 onChange={handleChange}
-                                isInvalid={errors.phone}
+                                isInvalid={!!errors.phone}
                                 required
                             />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.phone}
+                            </Form.Control.Feedback>
                         </Form.Group>
-                        {errors.phone && <span className="error">{errors.phone}</span>}
-
 
                         <Form.Group controlId="formAddress">
                             <Form.Label>Address</Form.Label>
@@ -158,13 +160,15 @@ function Order() {
                                 name="address"
                                 value={formData.address}
                                 onChange={handleChange}
-                                isInvalid={errors.address}
+                                isInvalid={!!errors.address}
                                 required
                             />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.address}
+                            </Form.Control.Feedback>
                         </Form.Group>
-                        {errors.address && <span className="error">{errors.address}</span>}
 
-                        <Form.Group >
+                        <Form.Group>
                             <Form.Label>Delivery Type</Form.Label>
                             <Form.Check
                                 type="radio"
@@ -185,17 +189,15 @@ function Order() {
                                 required
                             />
                         </Form.Group>
-                        {errors.deliveryType && <span className="error">{errors.deliveryType}</span>}
 
-
-                        <h3>total price:${formData.deliveryType === '3' ? (totalPrice + 30).toFixed(2) : totalPrice.toFixed(2)}</h3>
+                        <h3>Total Price: ${formData.deliveryType === '3' ? (totalPrice + 30).toFixed(2) : totalPrice.toFixed(2)}</h3>
                         <Button variant="primary" type="submit">
                             Submit
                         </Button>
-
                     </Form>
                 </Col>
             </Row>
+
             <Cart
                 cart={cart}
                 updateQuantity={updateQuantity}
@@ -204,7 +206,7 @@ function Order() {
                 show={showCart}
                 onClose={() => setShowCart(false)}
             />
-        </Container >
+        </Container>
     );
 }
 

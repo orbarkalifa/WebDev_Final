@@ -52,15 +52,20 @@ app.get('/order', async (req, res) => {
 // Create a new order
 app.post('/order', async (req, res) => {
     try {
+        // Validate request body
+        const { orderDetails } = req.body;
+
         // Generate a new order number
         const orderNumber = await getNextOrderNumber();
 
-        // Create a new order object with additional details
+        // Create a new order object
         const order = new Data({
-            ...req.body,
             type: 'order',
-            orderDate: new Date(),
-            orderNumber
+            orderDetails: {
+                ...orderDetails,
+                orderDate: new Date(),
+                orderNumber
+            }
         });
 
         // Save the order to the database
@@ -73,9 +78,11 @@ app.post('/order', async (req, res) => {
         });
     } catch (error) {
         // Handle any errors that occur during order creation
+        console.error('Error creating order:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
@@ -86,7 +93,7 @@ app.listen(port, () => {
 
 const getNextOrderNumber = async () => {
     try {
-        // Find the highest order number from the nested orderDetails
+        // Find the highest order number from the orderDetails embedded documents
         const lastOrder = await Data.findOne({ 'orderDetails.orderNumber': { $exists: true } })
             .sort({ 'orderDetails.orderNumber': -1 })
             .exec();

@@ -13,9 +13,10 @@ const Navbar = ({ cart, toggleCart }) => {
             <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" />
             <BootstrapNavbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                    <Nav.Link href="/">Home</Nav.Link>
+                    <Nav.Link href="/">HOME</Nav.Link>
+                    <Nav.Link href="#shop">SHOP</Nav.Link>
                     <Button variant="outline-primary" onClick={toggleCart}>
-                        <FaShoppingCart /> Cart ({totalQuantity})  ${totalPrice}
+                        <FaShoppingCart /> ${totalPrice} ({totalQuantity})
                     </Button>
                 </Nav>
             </BootstrapNavbar.Collapse>
