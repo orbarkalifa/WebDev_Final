@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import Navbar from './Navbar';
 import ItemsList from './ItemsList';
 import Cart from './Cart';
-import Header from './Header';
 import useCart from "../hooks/useCart";
 
 
@@ -18,12 +17,7 @@ function Homepage() {
             <Navbar cart={cart} toggleCart={() => setShowCart(!showCart)} />
             <Row>
                 <Col md={8}>
-                    <Header />
-                </Col>
-            </Row>
-            <Row>
-                <Col md={8}>
-                    <ItemsList id="shop" addToCart={addToCart} />
+                    <ItemsList addToCart={addToCart} />
                 </Col>
             </Row>
             <Cart
