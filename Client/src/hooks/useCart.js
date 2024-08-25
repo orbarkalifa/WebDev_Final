@@ -1,6 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 
-// Custom hook for cart state management
 const useCart = () => {
     const [cart, setCart] = useState(() => {
         const savedCart = localStorage.getItem('cart');
@@ -11,7 +10,7 @@ const useCart = () => {
         localStorage.setItem('cart', JSON.stringify(cart));
     }, [cart]);
 
-    const addToCart = useCallback((item) => {
+    const addToCart = (item) => {
         setCart(prevCart => {
             const existingItem = prevCart.find(cartItem => cartItem._id === item._id);
             if (existingItem) {
@@ -24,23 +23,21 @@ const useCart = () => {
                 return [...prevCart, { ...item, quantity: 1 }];
             }
         });
-    }, []);
-
-    const emptyCart = () => {
-        setCart([]);
     };
 
-    const updateQuantity = useCallback((id, quantity) => {
+    const emptyCart = () => setCart([]);
+
+    const updateQuantity = (id, quantity) => {
         setCart(prevCart =>
             prevCart.map(item =>
                 item._id === id ? { ...item, quantity } : item
             )
         );
-    }, []);
+    };
 
-    const deleteItem = useCallback((id) => {
+    const deleteItem = (id) => {
         setCart(prevCart => prevCart.filter(item => item._id !== id));
-    }, []);
+    };
 
     return {
         cart,
@@ -50,6 +47,5 @@ const useCart = () => {
         emptyCart
     };
 };
-
 
 export default useCart;
