@@ -4,14 +4,14 @@ import { ListGroup, Image, Row, Col } from 'react-bootstrap';
 const OrderItem = ({ item }) => {
     return (
         <ListGroup.Item>
-            <Row className="align-items-center">
+            <Row >
                 <Col xs={4} md={3}>
                     <Image
                         src={item.imgUrl}
                         alt={item.name}
                         fluid
                         rounded
-                        className="order-item-img"
+
                     />
                 </Col>
                 <Col xs={8} md={9}>

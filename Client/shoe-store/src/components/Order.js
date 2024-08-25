@@ -19,21 +19,29 @@ function Order() {
     const [errors, setErrors] = useState({});
     const [successMessage, setSuccessMessage] = useState('');
 
+    // Validates the form inputs
     const validateForm = () => {
         const newErrors = {};
         if (!formData.name) newErrors.name = 'Name is required';
         else if (/\d/.test(formData.name)) newErrors.name = 'Name cannot contain numbers';
+
         if (!formData.email) newErrors.email = 'Email is required';
         else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
+
         if (!formData.phone) newErrors.phone = 'Phone number is required';
-        else if (!/^\d{10}$/.test(formData.phone.replace(/-/g, ''))) newErrors.phone = 'Phone number must be 10 digits';
         if (!formData.address) newErrors.address = 'Address is required';
-        if (cart.length === 0) newErrors.cartSize = 'Cannot order an empty cart';
+
+        if (cart.length === 0) {
+            newErrors.cartSize = 'Cannot order an empty cart';
+        } else if (cart.some(item => item.quantity <= 0)) {
+            newErrors.cartItems = 'All items must have a quantity greater than 0';
+        }
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
+    // Handles changes to form fields
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevFormData => ({
@@ -42,16 +50,21 @@ function Order() {
         }));
     };
 
+    // Handles form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!validateForm()) return;
 
+        // Calculate total price with delivery fee
+        const deliveryFee = formData.deliveryType === '3' ? 30 : 0;
+        const totalPriceWithFee = totalPrice + deliveryFee;
+
         try {
             const body = {
                 orderDetails: {
                     items: cart,
-                    totalPrice: totalPrice,
+                    totalPrice: totalPriceWithFee,
                     customer: formData,
                 }
             };
@@ -67,31 +80,52 @@ function Order() {
         }
     };
 
+    // Calculate the total price of items in the cart
     const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
     return (
         <Container>
             <Navbar cart={cart} toggleCart={() => setShowCart(!showCart)} />
 
-            <Row className="my-4">
+            <Row className="mb-4">
                 {cart.length > 0 ? (
                     cart.map(item => item.quantity > 0 && (
-                        <Row className="justify-content-center mb-3" key={item._id}>
-                            <Col lg={6}>
+                        <Row key={item._id}>
+                            <Col>
                                 <OrderItem item={item} />
                             </Col>
                         </Row>
                     ))
                 ) : (
-                    <Col className="text-center">
+                    <Col>
                         <p>Your cart is empty.</p>
                     </Col>
                 )}
             </Row>
 
+            {errors.cartSize && (
+                <Row className="mb-4">
+                    <Col>
+                        <div className="alert alert-danger">
+                            {errors.cartSize}
+                        </div>
+                    </Col>
+                </Row>
+            )}
+
+            {errors.cartItems && (
+                <Row className="mb-4">
+                    <Col>
+                        <div className="alert alert-danger">
+                            {errors.cartItems}
+                        </div>
+                    </Col>
+                </Row>
+            )}
+
             {successMessage && (
-                <Row className="justify-content-center mb-4">
-                    <Col md={6}>
+                <Row className="mb-4">
+                    <Col>
                         <div className="alert alert-success">
                             {successMessage}
                         </div>
@@ -99,8 +133,8 @@ function Order() {
                 </Row>
             )}
 
-            <Row className="justify-content-md-center">
-                <Col md={6}>
+            <Row>
+                <Col>
                     <h2>Contact Form</h2>
                     <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="formName">
@@ -191,7 +225,7 @@ function Order() {
                         </Form.Group>
 
                         <h3>Total Price: ${formData.deliveryType === '3' ? (totalPrice + 30).toFixed(2) : totalPrice.toFixed(2)}</h3>
-                        <Button variant="primary" type="submit">
+                        <Button type="submit" variant="primary">
                             Submit
                         </Button>
                     </Form>

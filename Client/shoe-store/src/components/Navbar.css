@@ -1,0 +1,67 @@
+/* Navbar styles */
+.custom-navbar {
+    background: rgba(
+        255,
+        255,
+        255,
+        0.8
+    ); /* Semi-transparent white background */
+    backdrop-filter: blur(10px); /* Adds a blur effect to the background */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for separation */
+    z-index: 1030; /* Ensures navbar is on top of other content */
+}
+
+/* Text and icon color */
+.custom-navbar .nav-link {
+    color: #333; /* Dark color for text and icons */
+    font-weight: 500; /* Medium font weight for better readability */
+}
+
+/* Hover effect for nav links */
+.custom-navbar .nav-link {
+    background-color: rgba(
+        255,
+        255,
+        255,
+        0.6
+    ); /* Slightly darker background on hover */
+    border-radius: 4px; /* Rounded corners */
+    padding: 0.75rem 1.5rem; /* Increase padding for better size */
+    font-size: 1.1rem; /* Increase font size */
+    margin-right: 1rem; /* Add spacing between nav links */
+    transition: background-color 0.3s ease; /* Smooth transition effect */
+}
+
+.custom-navbar .nav-link:hover {
+    background-color: rgba(
+        255,
+        255,
+        255,
+        0.8
+    ); /* Lighter background on hover */
+}
+
+/* Button styles */
+.custom-navbar .cart-button {
+    padding: 0.75rem 1.5rem; /* Increase button padding */
+    font-size: 1rem; /* Adjust font size for better balance */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition effect */
+}
+
+/* Button outline style */
+.custom-navbar .btn-outline-dark {
+    border-color: #333; /* Darker border color */
+    color: #333; /* Darker text color */
+}
+
+/* Badge styling */
+.custom-navbar .badge {
+    background-color: #333; /* Darker background for the badge */
+    color: #fff; /* White text color */
+}
+
+/* Price span styling */
+.custom-navbar .price {
+    font-weight: 600; /* Bold text for price */
+    font-size: 1rem; /* Adjust font size for price */
+}

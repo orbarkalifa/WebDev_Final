@@ -17,12 +17,12 @@ function Homepage() {
         <Container>
             <Navbar cart={cart} toggleCart={() => setShowCart(!showCart)} />
             <Row>
-                <Col md={8}>
+                <Col >
                     <Header />
                 </Col>
             </Row>
             <Row>
-                <Col md={8}>
+                <Col>
                     <ItemsList id="shop" addToCart={addToCart} />
                 </Col>
             </Row>

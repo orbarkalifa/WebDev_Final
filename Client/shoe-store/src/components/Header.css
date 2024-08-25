@@ -13,6 +13,8 @@
 .header-title {
     font-size: 3rem;
     margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5),
+        /* Offset X, Offset Y, Blur Radius, Color */ 0 0 1px rgba(0, 0, 0, 0.7); /* Additional shadow for a subtle effect */
 }
 
 .header-description {

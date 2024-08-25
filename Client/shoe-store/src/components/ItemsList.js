@@ -13,8 +13,8 @@ const ItemsList = ({ addToCart }) => {
     }, []);
 
     return (
-        <Container>
-            <h1 className="my-4">Items Collection</h1>
+        <Container id='shop'>
+            <h1 >Items Collection</h1>
             <Row>
                 {items.map(item => (
                     <Col key={item._id} xs={12} sm={6} md={4} lg={4}>
