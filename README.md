@@ -1,87 +1,63 @@
-# Shoe Store - Full-Stack E-commerce Application
+# Shoe Store Application
 
-This is a full-stack e-commerce web application built with the MERN stack (MongoDB, Express.js, React, Node.js). The project serves as a portfolio piece to demonstrate skills in both front-end and back-end development.
+This project is a full-stack web application for a shoe store.
 
-![Homepage Screenshot](Client/public/home-background.jpg)
+## How to Run the Project Locally
 
-## Features
-
-- **Product Catalog:** Browse a variety of shoes, with images and details.
-- **Shopping Cart:** Add and remove items from the cart.
-- **Order Placement:** A simulated order process.
-- **RESTful API:** A back-end server that provides data to the front-end.
-
-## Technologies Used
-
-### Front-End
-- **React:** A JavaScript library for building user interfaces.
-- **React Router:** For client-side routing.
-- **CSS:** Custom styling for components.
-
-### Back-End
-- **Node.js:** A JavaScript runtime environment.
-- **Express.js:** A web application framework for Node.js.
-- **MongoDB:** A NoSQL database for storing product and order information.
-- **Mongoose:** An ODM library for MongoDB and Node.js.
-- **CORS:** For enabling cross-origin resource sharing.
-
-## Getting Started
-
-To get a local copy up and running, follow these simple steps.
+This guide will walk you through setting up and running the project on your local machine using a local MongoDB database.
 
 ### Prerequisites
 
-- **Node.js** and **npm** installed on your machine.
-- **MongoDB** installed and running. You can use a local instance or a cloud service like MongoDB Atlas.
+Before you begin, ensure you have the following installed:
+- **Node.js and npm:** [Download and Install Node.js](https://nodejs.org/)
+- **MongoDB:** [Install MongoDB Community Edition](https://www.mongodb.com/try/download/community)
 
-### Installation & Setup
+### Step 1: Set Up the Server
 
-1.  **Clone the repository:**
-    ```sh
-    git clone https://github.com/your_username/your_repository_name.git
-    cd your_repository_name
-    ```
+1.  **Start Your Local MongoDB Server:**
+    Ensure your MongoDB server is running. You can typically start it by running the `mongod` command in your terminal.
 
-2.  **Install Server Dependencies:**
-    ```sh
+2.  **Navigate to the Server Directory:**
+    Open your terminal and go to the `Server` directory.
+    ```bash
     cd Server
+    ```
+
+3.  **Install Server Dependencies:**
+    Install the necessary Node.js packages.
+    ```bash
     npm install
     ```
 
-3.  **Install Client Dependencies:**
-    ```sh
-    cd ../Client
+4.  **Start the Server:**
+    Run the server using `nodemon`, which will automatically restart on file changes.
+    ```bash
+    npm start
+    ```
+    The server will connect to your local MongoDB instance and run on `http://localhost:8080`.
+
+### Step 2: Set Up the Client
+
+1.  **Navigate to the Client Directory:**
+    Open a **new terminal window** and go to the `Client` directory.
+    ```bash
+    cd Client
+    ```
+
+2.  **Install Client Dependencies:**
+    Install the required packages for the React application.
+    ```bash
     npm install
     ```
 
-4.  **Configure Environment Variables:**
-    The server requires a MongoDB connection string. You will need to set this up. (Note: You may need to add a `.env` file to the `Server` directory for this).
-
-### Running the Application
-
-1.  **Start the Back-End Server:**
-    From the `Server` directory, run:
-    ```sh
+3.  **Start the Client:**
+    Launch the React development server.
+    ```bash
     npm start
     ```
-    The server will start on `http://localhost:5000` (or the port you configure).
+    The application will automatically open in your default web browser at `http://localhost:3000`.
 
-2.  **Start the Front-End Development Server:**
-    From the `Client` directory, run:
-    ```sh
-    npm start
-    ```
-    The application will open automatically in your browser at `http://localhost:3000`.
+### Stopping the Application
 
-## Project Structure
-
-```
-.
-├── Client/         # React front-end
-│   ├── public/
-│   └── src/
-├── Server/         # Node.js/Express back-end
-│   ├── models/
-│   └── server.js
-└── README.md
-```
+- To stop the client or server, press `Ctrl + C` in their respective terminal windows.
+- To stop your local MongoDB server, you can typically press `Ctrl + C` in the terminal where it is running.
